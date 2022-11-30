@@ -1,0 +1,10 @@
+name: HyChat
+version: 1.0.0
+main: me.xhyrom.hychat.HyChat
+author: xHyroM#2815
+api-version: 1.19
+softdepend:
+  - PlaceholderAPI
+
+depend:
+  - HyLib

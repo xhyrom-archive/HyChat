@@ -1,0 +1,26 @@
+locale: "en-US"
+
+# Custom chat format - use <player> for player name, <message> for message
+# There is also PlaceholderAPI support with %
+# Use MiniMessage
+chat-format: "<gray><player> <dark_gray>| <white><message>"
+
+# Anti-spam settings
+# If you want to bypass antispam use "hychat.anti-spam.bypass"
+anti-spam:
+  # Enable antispam
+  enabled: true
+  # How many messages can be sent in the time interval (in milliseconds)
+  # You can override this with the permission "hychat.anti-spam.cooldown.X"
+  cooldown: 5000
+
+# No chat reports settings
+# With the chat format, messages are already automatically made as system messages, but this can disable the popup :)
+no-chat-reports:
+  # Disable "not secure" popup
+  disable-popup: true
+  # Not required because chat reports are disabled
+  send-header-chat-packet: false
+
+# Please, don't modify this version. It's used for internal purposes.
+config-version: 4
