@@ -22,5 +22,16 @@ no-chat-reports:
   # Not required because chat reports are disabled
   send-header-chat-packet: false
 
+# Anti-swear settings
+# If you want to bypass antiswear use "hychat.anti-swear.bypass"
+anti-swear:
+  # Enable antiswear
+  enabled: true
+  # List of words to block
+  # You can override this with the permission "hychat.anti-swear.bypass.X"
+  blocked-words:
+    - "shit"
+    - "trash"
+
 # Please, don't modify this version. It's used for internal purposes.
-config-version: 4
+config-version: 5

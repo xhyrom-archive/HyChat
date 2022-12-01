@@ -6,6 +6,8 @@ commands:
 modules:
   anti-spam:
     cooldown: "<gradient:#2fa4c4:#2fbfc4:#2fc4a9>HyChat</gradient> <dark_gray>| <gray>You can't send messages so fast! Please wait <red>%cooldown%<gray>"
+  anti-swear:
+    message: "<gradient:#2fa4c4:#2fbfc4:#2fc4a9>HyChat</gradient> <dark_gray>| <gray>Don't swear!"
 
 # Please, don't modify this version. It's used for internal purposes.
-config-version: 6
+config-version: 7

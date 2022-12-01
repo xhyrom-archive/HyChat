@@ -1,7 +1,6 @@
 package me.xhyrom.hychat.listeners
 
 import me.xhyrom.hychat.HyChat
-import me.xhyrom.hylib.api.HyLib
 import me.xhyrom.hylib.libs.packetevents.api.event.PacketListenerAbstract
 import me.xhyrom.hylib.libs.packetevents.api.event.PacketListenerPriority
 import me.xhyrom.hylib.libs.packetevents.api.event.PacketSendEvent

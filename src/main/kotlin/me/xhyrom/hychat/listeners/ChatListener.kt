@@ -14,9 +14,6 @@ import net.kyori.adventure.text.minimessage.tag.standard.StandardTags
 
 import net.kyori.adventure.text.minimessage.tag.resolver.TagResolver
 
-
-
-
 val antiSpamCooldown = mutableMapOf<UUID, Long>()
 
 class ChatListener : Listener {
@@ -53,7 +50,7 @@ class ChatListener : Listener {
 
     @EventHandler(priority = EventPriority.HIGH)
     fun onChatAntiSpam(event: AsyncPlayerChatEvent) {
-        if (!HyChat.getInstance().config.getBoolean("anti-spam.enabled") && !event.player.hasPermission("hychat.anti-spam.bypass")) return
+        if (!HyChat.getInstance().config.getBoolean("anti-spam.enabled") || event.player.hasPermission("hychat.anti-spam.bypass")) return
 
         if (antiSpamCooldown[event.player.uniqueId] != null) {
             if (antiSpamCooldown[event.player.uniqueId]!! > System.currentTimeMillis()) {
@@ -80,7 +77,22 @@ class ChatListener : Listener {
         antiSpamCooldown[event.player.uniqueId] = System.currentTimeMillis() + defaultCooldown
     }
 
-    fun formatTime(milliseconds: Long): String {
+    @EventHandler(priority = EventPriority.HIGH)
+    fun onChatAntiSwear(event: AsyncPlayerChatEvent) {
+        if (!HyChat.getInstance().config.getBoolean("anti-swear.enabled") || event.player.hasPermission("hychat.anti-swear.bypass")) return
+
+        val blockedWords = HyChat.getInstance().config.getStringList("anti-swear.blocked-words")
+        if (blockedWords.any { event.message.contains(it, ignoreCase = true) }) {
+            event.isCancelled = true
+            event.player.sendMessage(
+                MiniMessage.miniMessage().deserialize(
+                    HyChat.getInstance().locale().getString("modules.anti-swear.message")
+                )
+            )
+        }
+    }
+
+    private fun formatTime(milliseconds: Long): String {
         val seconds = (milliseconds / 1000) % 60
         val minutes = (milliseconds / (1000 * 60) % 60)
         val hours = (milliseconds / (1000 * 60 * 60) % 24)
