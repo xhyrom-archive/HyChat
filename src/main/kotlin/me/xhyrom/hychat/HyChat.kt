@@ -1,8 +1,10 @@
 package me.xhyrom.hychat
 
+import io.papermc.paper.chat.ChatRenderer
 import me.xhyrom.hychat.hooks.HooksManager
 import me.xhyrom.hychat.listeners.ChatListener
 import me.xhyrom.hychat.listeners.PacketListener
+import me.xhyrom.hychat.modules.MuteChat
 import me.xhyrom.hylib.api.HyLib
 import me.xhyrom.hylib.api.structs.Config
 import me.xhyrom.hylib.api.structs.Language
@@ -13,6 +15,7 @@ import me.xhyrom.hylib.libs.commandapi.executors.CommandExecutor
 import me.xhyrom.hylib.libs.packetevents.api.PacketEvents
 import me.xhyrom.hylib.libs.packetevents.impl.factory.spigot.SpigotPacketEventsBuilder
 import net.kyori.adventure.text.minimessage.MiniMessage
+import org.bukkit.Bukkit
 import org.bukkit.command.CommandSender
 import org.bukkit.plugin.java.JavaPlugin
 
@@ -55,69 +58,93 @@ class HyChat : JavaPlugin() {
     fun createCommand() {
         HyLib.getInstance().getCommandManager().addSubCommand(
             HyLib.getInstance().getCommandManager().createCommand("chat")
-                .withFullDescription("reload chat configuration")
-                .withArguments(
-                    LiteralArgument("reload").setListed(false),
-                    StringArgument("type").includeSuggestions(
-                        ArgumentSuggestions.strings(
-                            "config",
-                            "lang"
-                        )
-                    )
-                )
-                .executes(
-                    CommandExecutor { sender: CommandSender, args: Array<Any?> ->
-                        run {
-                            when (args[0] as String) {
-                                "config" -> {
-                                    if (!config!!.reload()) {
-                                        sender.sendMessage(
+                .withFullDescription("chat plugin management")
+                .withSubcommand(
+                    HyLib.getInstance().getCommandManager().createCommand("mute")
+                        .withPermission("hychat.command.mute")
+                        .executes(
+                            CommandExecutor { sender: CommandSender, args: Array<Any?> ->
+                                run {
+                                    MuteChat.isMuted = !MuteChat.isMuted
+
+                                    for (player in Bukkit.getOnlinePlayers()) {
+                                        player.sendMessage(
                                             MiniMessage.miniMessage().deserialize(
-                                                locale().getString("commands.chat.reload.fail").replace(
-                                                    "%type%",
-                                                    "Chat"
+                                                locale().getString(
+                                                    if (MuteChat.isMuted) "commands.chat.mute.muted"
+                                                    else "commands.chat.mute.unmuted"
                                                 )
                                             )
                                         )
-
-                                        return@CommandExecutor
                                     }
-
-                                    sender.sendMessage(
-                                        MiniMessage.miniMessage().deserialize(
-                                            locale().getString("commands.chat.reload.success").replace(
-                                                "%type%",
-                                                "Chat"
-                                            )
-                                        )
-                                    )
                                 }
-                                "lang" -> {
-                                    if (!locale().reload()) {
-                                        sender.sendMessage(
-                                            MiniMessage.miniMessage().deserialize(
-                                                locale().getString("commands.chat.reload.fail").replace(
-                                                    "%type%",
-                                                    "Language"
+                            })
+                )
+                .withSubcommand(
+                    HyLib.getInstance().getCommandManager().createCommand("reload")
+                        .withPermission("hychat.command.reload")
+                        .withArguments(
+                            StringArgument("type").includeSuggestions(
+                                ArgumentSuggestions.strings(
+                                    "config",
+                                    "lang"
+                                )
+                            )
+                        )
+                        .executes(
+                            CommandExecutor { sender: CommandSender, args: Array<Any?> ->
+                                run {
+                                    when (args[0] as String) {
+                                        "config" -> {
+                                            if (!config!!.reload()) {
+                                                sender.sendMessage(
+                                                    MiniMessage.miniMessage().deserialize(
+                                                        locale().getString("commands.chat.reload.fail").replace(
+                                                            "%type%",
+                                                            "Chat"
+                                                        )
+                                                    )
+                                                )
+
+                                                return@CommandExecutor
+                                            }
+
+                                            sender.sendMessage(
+                                                MiniMessage.miniMessage().deserialize(
+                                                    locale().getString("commands.chat.reload.success").replace(
+                                                        "%type%",
+                                                        "Chat"
+                                                    )
                                                 )
                                             )
-                                        )
+                                        }
+                                        "lang" -> {
+                                            if (!locale().reload()) {
+                                                sender.sendMessage(
+                                                    MiniMessage.miniMessage().deserialize(
+                                                        locale().getString("commands.chat.reload.fail").replace(
+                                                            "%type%",
+                                                            "Language"
+                                                        )
+                                                    )
+                                                )
 
-                                        return@CommandExecutor
-                                    }
+                                                return@CommandExecutor
+                                            }
 
-                                    sender.sendMessage(
-                                        MiniMessage.miniMessage().deserialize(
-                                            locale().getString("commands.chat.reload.success").replace(
-                                                "%type%",
-                                                "Language"
+                                            sender.sendMessage(
+                                                MiniMessage.miniMessage().deserialize(
+                                                    locale().getString("commands.chat.reload.success").replace(
+                                                        "%type%",
+                                                        "Language"
+                                                    )
+                                                )
                                             )
-                                        )
-                                    )
+                                        }
+                                    }
                                 }
                             }
-                        }
-                    }
+                        )
                 )
         )
     }
@@ -125,6 +152,7 @@ class HyChat : JavaPlugin() {
     fun getHooks(): HooksManager {
         return hooks!!
     }
+
     fun locale(): Config {
         return language!!.getLocale(config!!.getString("locale"))
     }

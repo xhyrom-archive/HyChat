@@ -3,11 +3,17 @@ commands:
     reload:
       success: "<gradient:#2fa4c4:#2fbfc4:#2fc4a9>HyChat</gradient> <dark_gray>| <gray>%type% configuration has been reloaded!"
       fail: "<gradient:#2fa4c4:#2fbfc4:#2fc4a9>HyChat</gradient> <dark_gray>| <gray>%type% configuration <red>failed to reload<gray>, check console for more informations!"
+    mute:
+      muted: "<gradient:#2fa4c4:#2fbfc4:#2fc4a9>HyChat</gradient> <dark_gray>| <gray>Chat has been muted!"
+      unmuted: "<gradient:#2fa4c4:#2fbfc4:#2fc4a9>HyChat</gradient> <dark_gray>| <gray>Chat has been unmuted!"
+
 modules:
   anti-spam:
     cooldown: "<gradient:#2fa4c4:#2fbfc4:#2fc4a9>HyChat</gradient> <dark_gray>| <gray>You can't send messages so fast! Please wait <red>%cooldown%<gray>"
   anti-swear:
     message: "<gradient:#2fa4c4:#2fbfc4:#2fc4a9>HyChat</gradient> <dark_gray>| <gray>Don't swear!"
+  mute-chat:
+    message: "<gradient:#2fa4c4:#2fbfc4:#2fc4a9>HyChat</gradient> <dark_gray>| <gray>Chat is muted, you can't send messages!"
 
 # Please, don't modify this version. It's used for internal purposes.
-config-version: 7
+config-version: 8

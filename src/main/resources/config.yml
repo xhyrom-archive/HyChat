@@ -3,7 +3,25 @@ locale: "en-US"
 # Custom chat format - use <player> for player name, <message> for message
 # There is also PlaceholderAPI support with %
 # Use MiniMessage
-chat-format: "<gray><player> <dark_gray>| <white><message>"
+chat-format:
+  enabled: true
+  format: "<gray><player> <dark_gray>| <white><message>"
+  name-hover:
+    message:
+      enabled: true
+      format: |
+        <gradient:#2fa4c4:#2fbfc4:#2fc4a9>HyChat</gradient>
+        <dark_gray>| <gray>Player: <white><player>
+        <dark_gray>| <gray>Message: <white><message>
+        <dark_gray>| <gray>Rank: <white>%luckperms_prefix%
+    on-click:
+      enabled: true
+      action: "suggest_command"
+      value: "/msg <player> "
+
+# Clickable links in chat
+# Allows to click on links and open them in browser
+clickable-links: true
 
 # Anti-spam settings
 # If you want to bypass antispam use "hychat.anti-spam.bypass"
@@ -34,4 +52,4 @@ anti-swear:
     - "trash"
 
 # Please, don't modify this version. It's used for internal purposes.
-config-version: 5
+config-version: 7
