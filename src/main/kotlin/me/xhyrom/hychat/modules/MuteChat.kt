@@ -15,7 +15,7 @@ object MuteChat {
             event.isCancelled = true
             event.player.sendMessage(
                 MiniMessage.miniMessage().deserialize(
-                    HyChat.getInstance().locale().getString("modules.mute-chat.message")
+                    HyChat.getInstance().localeGetStringPapi(event.player, "modules.mute-chat.message")
                 )
             )
 

@@ -1,15 +1,14 @@
 package me.xhyrom.hychat
 
-import io.papermc.paper.chat.ChatRenderer
 import me.xhyrom.hychat.hooks.HooksManager
 import me.xhyrom.hychat.listeners.ChatListener
 import me.xhyrom.hychat.listeners.PacketListener
+import me.xhyrom.hychat.listeners.PlayerListener
 import me.xhyrom.hychat.modules.MuteChat
 import me.xhyrom.hylib.api.HyLib
 import me.xhyrom.hylib.api.structs.Config
 import me.xhyrom.hylib.api.structs.Language
 import me.xhyrom.hylib.libs.commandapi.arguments.ArgumentSuggestions
-import me.xhyrom.hylib.libs.commandapi.arguments.LiteralArgument
 import me.xhyrom.hylib.libs.commandapi.arguments.StringArgument
 import me.xhyrom.hylib.libs.commandapi.executors.CommandExecutor
 import me.xhyrom.hylib.libs.packetevents.api.PacketEvents
@@ -17,6 +16,7 @@ import me.xhyrom.hylib.libs.packetevents.impl.factory.spigot.SpigotPacketEventsB
 import net.kyori.adventure.text.minimessage.MiniMessage
 import org.bukkit.Bukkit
 import org.bukkit.command.CommandSender
+import org.bukkit.entity.Player
 import org.bukkit.plugin.java.JavaPlugin
 
 
@@ -48,6 +48,7 @@ class HyChat : JavaPlugin() {
         language = HyLib.getInstance().getLanguageManager().register(this)
 
         server.pluginManager.registerEvents(ChatListener(), this)
+        server.pluginManager.registerEvents(PlayerListener(), this)
 
         PacketEvents.getAPI().eventManager.registerListener(PacketListener())
         PacketEvents.getAPI().init()
@@ -155,5 +156,15 @@ class HyChat : JavaPlugin() {
 
     fun locale(): Config {
         return language!!.getLocale(config!!.getString("locale"))
+    }
+
+    fun localeGetStringPapi(player: Player, path: String): String {
+        var msg = locale().getString(path)
+
+        if (getHooks().placeholderApi != null) {
+            msg = getHooks().placeholderApi!!.setPlaceholders(player, msg).replace("%", "%%")
+        }
+
+        return msg
     }
 }

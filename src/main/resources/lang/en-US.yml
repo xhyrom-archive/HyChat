@@ -14,6 +14,9 @@ modules:
     message: "<gradient:#2fa4c4:#2fbfc4:#2fc4a9>HyChat</gradient> <dark_gray>| <gray>Don't swear!"
   mute-chat:
     message: "<gradient:#2fa4c4:#2fbfc4:#2fc4a9>HyChat</gradient> <dark_gray>| <gray>Chat is muted, you can't send messages!"
+  join-and-leave:
+    join-message: "<gradient:#2fa4c4:#2fbfc4:#2fc4a9>HyChat</gradient> <dark_gray>| <gray><player> <green>joined<gray> the game!"
+    leave-message: "<gradient:#2fa4c4:#2fbfc4:#2fc4a9>HyChat</gradient> <dark_gray>| <gray><player> <red>left<gray> the game!"
 
 # Please, don't modify this version. It's used for internal purposes.
-config-version: 8
+config-version: 9

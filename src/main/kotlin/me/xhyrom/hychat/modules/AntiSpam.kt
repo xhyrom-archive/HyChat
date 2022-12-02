@@ -14,7 +14,7 @@ object AntiSpam {
                 event.isCancelled = true
                 event.player.sendMessage(
                     MiniMessage.miniMessage().deserialize(
-                        HyChat.getInstance().locale().getString("modules.anti-spam.cooldown")
+                        HyChat.getInstance().localeGetStringPapi(event.player, "modules.anti-spam.cooldown")
                             .replace("%cooldown%", formatTime(antiSpamCooldown[event.player.uniqueId]!! - System.currentTimeMillis()))
                     )
                 )

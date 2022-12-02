@@ -59,7 +59,7 @@ class ChatListener : Listener {
         var format = HyChat.getInstance().config.getString("chat-format.format")!!
 
         if (HyChat.getInstance().getHooks().placeholderApi != null) {
-            format = HyChat.getInstance().getHooks().placeholderApi!!.setPlaceholders(event.player, format.replace("%", "%%"))
+            format = HyChat.getInstance().getHooks().placeholderApi!!.setPlaceholders(event.player, format).replace("%", "%%")
         }
 
         event.renderer { player, sourceDisplayName, message, _ ->
@@ -74,7 +74,7 @@ class ChatListener : Listener {
                             var nameHoverFormat = HyChat.getInstance().config.getString("chat-format.name-hover.message.format")!!
 
                             if (HyChat.getInstance().getHooks().placeholderApi != null) {
-                                nameHoverFormat = HyChat.getInstance().getHooks().placeholderApi!!.setPlaceholders(event.player, nameHoverFormat.replace("%", "%%"))
+                                nameHoverFormat = HyChat.getInstance().getHooks().placeholderApi!!.setPlaceholders(event.player, nameHoverFormat).replace("%", "%%")
                             }
 
                             sdn = sdn.hoverEvent(
@@ -96,7 +96,7 @@ class ChatListener : Listener {
                                 .replace("<message>", PlainTextComponentSerializer.plainText().serialize(message))
 
                             if (HyChat.getInstance().getHooks().placeholderApi != null) {
-                                nameHoverClickValue = HyChat.getInstance().getHooks().placeholderApi!!.setPlaceholders(event.player, nameHoverClickValue.replace("%", "%%"))
+                                nameHoverClickValue = HyChat.getInstance().getHooks().placeholderApi!!.setPlaceholders(event.player, nameHoverClickValue).replace("%", "%%")
                             }
 
                             sdn = sdn.clickEvent(

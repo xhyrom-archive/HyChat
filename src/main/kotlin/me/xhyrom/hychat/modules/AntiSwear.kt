@@ -13,7 +13,7 @@ object AntiSwear {
             event.isCancelled = true
             event.player.sendMessage(
                 MiniMessage.miniMessage().deserialize(
-                    HyChat.getInstance().locale().getString("modules.anti-swear.message")
+                    HyChat.getInstance().localeGetStringPapi(event.player, "modules.anti-swear.message")
                 )
             )
 

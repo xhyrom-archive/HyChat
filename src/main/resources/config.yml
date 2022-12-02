@@ -40,6 +40,17 @@ no-chat-reports:
   # Not required because chat reports are disabled
   send-header-chat-packet: false
 
+# Join and leave messages
+# You can configure messages in the lang file
+# If you want to disable join and leave messages for specific players, use the permission
+  # "hychat.join-and-leave.bypass-join"
+  # "hychat.join-and-leave.bypass-leave"
+join-and-leave:
+    # Enable join messages
+  join-enabled: true
+  # Enable leave messages
+  leave-enabled: true
+
 # Anti-swear settings
 # If you want to bypass antiswear use "hychat.anti-swear.bypass"
 anti-swear:
@@ -52,4 +63,4 @@ anti-swear:
     - "trash"
 
 # Please, don't modify this version. It's used for internal purposes.
-config-version: 7
+config-version: 8
