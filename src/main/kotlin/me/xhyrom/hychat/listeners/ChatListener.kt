@@ -1,10 +1,9 @@
 package me.xhyrom.hychat.listeners
 
+import io.papermc.paper.event.player.AsyncChatEvent
 import me.xhyrom.hychat.HyChat
-import net.kyori.adventure.text.Component
 import net.kyori.adventure.text.minimessage.MiniMessage
 import net.kyori.adventure.text.minimessage.tag.resolver.Placeholder
-import org.bukkit.Bukkit
 import org.bukkit.event.EventHandler
 import org.bukkit.event.EventPriority
 import org.bukkit.event.Listener
@@ -27,23 +26,19 @@ class ChatListener : Listener {
         )
         .build()
 
-    @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
-    fun onChat(event: AsyncPlayerChatEvent) {
+    @EventHandler(priority = EventPriority.HIGHEST)
+    fun onChat(event: AsyncChatEvent) {
         var format = HyChat.getInstance().config.getString("chat-format")!!
 
         if (HyChat.getInstance().getHooks().placeholderApi != null) {
             format = HyChat.getInstance().getHooks().placeholderApi!!.setPlaceholders(event.player, format.replace("%", "%%"))
         }
 
-        event.isCancelled = true
-
-        for (player in Bukkit.getOnlinePlayers()) {
-            player.sendMessage(
-                MiniMessage.miniMessage().deserialize(
-                    format,
-                    Placeholder.component("message", safeMiniMessage.deserialize(event.message)),
-                    Placeholder.component("player", Component.text(event.player.name))
-                )
+        event.renderer { _, sourceDisplayName, message, _ ->
+            MiniMessage.miniMessage().deserialize(
+                format,
+                Placeholder.component("message", message),
+                Placeholder.component("player", sourceDisplayName)
             )
         }
     }
