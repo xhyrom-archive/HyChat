@@ -70,5 +70,9 @@ anti-swear:
     - "shit"
     - "trash"
 
+# Send some metrics into bstats (https://bstats.org/plugin/bukkit/HyChat/17003)
+# Also look into HyLib configuration
+send-metrics: true
+
 # Please, don't modify this version. It's used for internal purposes.
 config-version: 1

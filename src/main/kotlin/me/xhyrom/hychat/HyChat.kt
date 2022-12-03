@@ -43,11 +43,12 @@ class HyChat : JavaPlugin() {
 
     override fun onEnable() {
         instance = this
-        HyLib.getInstance().getBStatsManager().registerAddon(this)
 
         hooks = HooksManager()
         config = HyLib.getInstance().getConfigManager().register(this, "config")
         language = HyLib.getInstance().getLanguageManager().register(this)
+
+        HyLib.getInstance().getBStatsManager().registerAddon(this, 17003, config!!)
 
         server.pluginManager.registerEvents(ChatListener(), this)
         server.pluginManager.registerEvents(PlayerListener(), this)
