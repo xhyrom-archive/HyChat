@@ -59,7 +59,7 @@ class HyChat : JavaPlugin() {
         createCommand()
     }
 
-    fun createCommand() {
+    private fun createCommand() {
         HyLib.getInstance().getCommandManager().addSubCommand(
             HyLib.getInstance().getCommandManager().createCommand("chat")
                 .withFullDescription("chat plugin management")
@@ -67,7 +67,7 @@ class HyChat : JavaPlugin() {
                     HyLib.getInstance().getCommandManager().createCommand("mute")
                         .withPermission("hychat.command.mute")
                         .executes(
-                            CommandExecutor { sender: CommandSender, args: Array<Any?> ->
+                            CommandExecutor { _: CommandSender, _: Array<Any?> ->
                                 run {
                                     MuteChat.isMuted = !MuteChat.isMuted
 
