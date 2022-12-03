@@ -23,14 +23,13 @@ chat-format:
 # Allows to click on links and open them in browser
 clickable-links: true
 
-# Anti-spam settings
-# If you want to bypass antispam use "hychat.anti-spam.bypass"
-anti-spam:
-  # Enable antispam
+# Mentioning players in chat
+# Mention starts with @ (@hyro, @hychat)
+# Allows to mention players in chat
+mention-system:
   enabled: true
-  # How many messages can be sent in the time interval (in milliseconds)
-  # You can override this with the permission "hychat.anti-spam.cooldown.X"
-  cooldown: 5000
+  # Placeholder: <player> for player name
+  highlight-color: "<gradient:#2fa4c4:#2fbfc4:#2fc4a9><player></gradient:#2fa4c4:#2fbfc4:#2fc4a9>"
 
 # No chat reports settings
 # With the chat format, messages are already automatically made as system messages, but this can disable the popup :)
@@ -40,16 +39,25 @@ no-chat-reports:
   # Not required because chat reports are disabled
   send-header-chat-packet: false
 
-# Join and leave messages
-# You can configure messages in the lang file
-# If you want to disable join and leave messages for specific players, use the permission
+  # Join and leave messages
+  # You can configure messages in the lang file
+  # If you want to disable join and leave messages for specific players, use the permission
   # "hychat.join-and-leave.bypass-join"
   # "hychat.join-and-leave.bypass-leave"
 join-and-leave:
-    # Enable join messages
+  # Enable join messages
   join-enabled: true
   # Enable leave messages
   leave-enabled: true
+
+# Anti-spam settings
+# If you want to bypass antispam use "hychat.anti-spam.bypass"
+anti-spam:
+  # Enable antispam
+  enabled: true
+  # How many messages can be sent in the time interval (in milliseconds)
+  # You can override this with the permission "hychat.anti-spam.cooldown.X"
+  cooldown: 5000
 
 # Anti-swear settings
 # If you want to bypass antiswear use "hychat.anti-swear.bypass"
@@ -63,4 +71,4 @@ anti-swear:
     - "trash"
 
 # Please, don't modify this version. It's used for internal purposes.
-config-version: 8
+config-version: 9

@@ -4,8 +4,11 @@ import io.papermc.paper.event.player.AsyncChatEvent
 import me.xhyrom.hychat.HyChat
 import me.xhyrom.hychat.modules.AntiSpam
 import me.xhyrom.hychat.modules.AntiSwear
+import me.xhyrom.hychat.modules.Mentions
 import me.xhyrom.hychat.modules.MuteChat
 import me.xhyrom.hylib.api.managers.UtilsManager
+import net.kyori.adventure.audience.Audience
+import net.kyori.adventure.text.Component
 import net.kyori.adventure.text.TextReplacementConfig
 import net.kyori.adventure.text.event.ClickEvent
 import net.kyori.adventure.text.event.ClickEvent.Action
@@ -16,6 +19,7 @@ import net.kyori.adventure.text.minimessage.tag.resolver.TagResolver
 import net.kyori.adventure.text.minimessage.tag.standard.StandardTags
 import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer
 import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer
+import org.bukkit.entity.Player
 import org.bukkit.event.EventHandler
 import org.bukkit.event.EventPriority
 import org.bukkit.event.Listener
@@ -57,6 +61,7 @@ class ChatListener : Listener {
 
         if (!HyChat.getInstance().config.getBoolean("chat-format.enabled")) return
 
+        val mentions = Mentions.handle(event)
         var format = HyChat.getInstance().config.getString("chat-format.format")!!
 
         if (HyChat.getInstance().getHooks().placeholderApi != null) {
@@ -70,60 +75,69 @@ class ChatListener : Listener {
             return
         }
 
-        event.renderer { player, sourceDisplayName, message, _ ->
-            var sdn = sourceDisplayName
-            MiniMessage.miniMessage().deserialize(
-                format,
-                Placeholder.component("message", message),
-                Placeholder.component(
-                    "player",
-                    run {
-                        if (HyChat.getInstance().config.getBoolean("chat-format.name-hover.message.enabled")) {
-                            var nameHoverFormat = HyChat.getInstance().config.getString("chat-format.name-hover.message.format")!!
+        mentions.players.forEach {
+            event.viewers().remove(it)
+            it.sendMessage(sendFormattedPlayerMessage(event.player, event.player.displayName(), mentions.message, format))
+        }
 
-                            if (HyChat.getInstance().getHooks().placeholderApi != null) {
-                                nameHoverFormat = HyChat.getInstance().getHooks().placeholderApi!!.setPlaceholders(event.player, nameHoverFormat).replace("%", "%%")
-                            }
-
-                            sdn = sdn.hoverEvent(
-                                HoverEvent.hoverEvent(
-                                    HoverEvent.Action.SHOW_TEXT,
-                                    MiniMessage.miniMessage().deserialize(
-                                        nameHoverFormat,
-                                        Placeholder.component("player", sourceDisplayName),
-                                        Placeholder.component("message", message)
-                                    )
-                                )
-                            )
-                        }
-
-                        if (HyChat.getInstance().config.getBoolean("chat-format.name-hover.on-click.enabled")) {
-                            val nameHoverClickAction = HyChat.getInstance().config.getString("chat-format.name-hover.on-click.action")!!
-                            var nameHoverClickValue = HyChat.getInstance().config.getString("chat-format.name-hover.on-click.value")!!
-                                .replace("<player>", PlainTextComponentSerializer.plainText().serialize(sourceDisplayName))
-                                .replace("<message>", PlainTextComponentSerializer.plainText().serialize(message))
-
-                            if (HyChat.getInstance().getHooks().placeholderApi != null) {
-                                nameHoverClickValue = HyChat.getInstance().getHooks().placeholderApi!!.setPlaceholders(event.player, nameHoverClickValue).replace("%", "%%")
-                            }
-
-                            sdn = sdn.clickEvent(
-                                ClickEvent.clickEvent(
-                                    Action.valueOf(nameHoverClickAction.uppercase()),
-                                    nameHoverClickValue
-                                )
-                            )
-                        }
-
-                        sdn
-                    }
-                )
-            )
+        event.renderer { _, sourceDisplayName, message, _ ->
+            sendFormattedPlayerMessage(event.player, sourceDisplayName, message, format)
         }
     }
 
+    private fun sendFormattedPlayerMessage(player: Player, sourceDisplayName: Component, message: Component, format: String): Component {
+        var sdn = sourceDisplayName
+        return MiniMessage.miniMessage().deserialize(
+            format,
+            Placeholder.component("message", message),
+            Placeholder.component(
+                "player",
+                run {
+                    if (HyChat.getInstance().config.getBoolean("chat-format.name-hover.message.enabled")) {
+                        var nameHoverFormat = HyChat.getInstance().config.getString("chat-format.name-hover.message.format")!!
+
+                        if (HyChat.getInstance().getHooks().placeholderApi != null) {
+                            nameHoverFormat = HyChat.getInstance().getHooks().placeholderApi!!.setPlaceholders(player, nameHoverFormat).replace("%", "%%")
+                        }
+
+                        sdn = sdn.hoverEvent(
+                            HoverEvent.hoverEvent(
+                                HoverEvent.Action.SHOW_TEXT,
+                                MiniMessage.miniMessage().deserialize(
+                                    nameHoverFormat,
+                                    Placeholder.component("player", sourceDisplayName),
+                                    Placeholder.component("message", message)
+                                )
+                            )
+                        )
+                    }
+
+                    if (HyChat.getInstance().config.getBoolean("chat-format.name-hover.on-click.enabled")) {
+                        val nameHoverClickAction = HyChat.getInstance().config.getString("chat-format.name-hover.on-click.action")!!
+                        var nameHoverClickValue = HyChat.getInstance().config.getString("chat-format.name-hover.on-click.value")!!
+                            .replace("<player>", PlainTextComponentSerializer.plainText().serialize(sourceDisplayName))
+                            .replace("<message>", PlainTextComponentSerializer.plainText().serialize(message))
+
+                        if (HyChat.getInstance().getHooks().placeholderApi != null) {
+                            nameHoverClickValue = HyChat.getInstance().getHooks().placeholderApi!!.setPlaceholders(player, nameHoverClickValue).replace("%", "%%")
+                        }
+
+                        sdn = sdn.clickEvent(
+                            ClickEvent.clickEvent(
+                                Action.valueOf(nameHoverClickAction.uppercase()),
+                                nameHoverClickValue
+                            )
+                        )
+                    }
+
+                    sdn
+                }
+            )
+        )
+    }
+
     @EventHandler(priority = EventPriority.HIGH)
-    fun onChatAntiSpam(event: AsyncPlayerChatEvent) {
+    fun onChat(event: AsyncPlayerChatEvent) {
         if (MuteChat.handle(event)) return
         if (AntiSwear.handle(event)) return
         if (AntiSpam.handle(event)) return
