@@ -47,16 +47,16 @@ class ChatListener : Listener {
 
     @EventHandler(priority = EventPriority.HIGHEST)
     fun onChatFormat(event: AsyncChatEvent) {
-        if (HyChat.getInstance().config.getBoolean("clickable-links")) {
-            event.message(event.message().replaceText(URL_REPLACER))
-        }
-
         if (event.player.hasPermission("hychat.colors")) {
             event.message(
                 LegacyComponentSerializer.legacy('&').deserialize(
                     PlainTextComponentSerializer.plainText().serialize(event.message())
                 )
             )
+        }
+
+        if (HyChat.getInstance().config.getBoolean("clickable-links")) {
+            event.message(event.message().replaceText(URL_REPLACER))
         }
 
         if (!HyChat.getInstance().config.getBoolean("chat-format.enabled")) return
