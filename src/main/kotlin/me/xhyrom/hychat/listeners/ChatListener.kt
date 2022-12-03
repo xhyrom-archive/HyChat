@@ -100,6 +100,8 @@ class ChatListener : Listener {
                             nameHoverFormat = HyChat.getInstance().getHooks().placeholderApi!!.setPlaceholders(player, nameHoverFormat).replace("%", "%%")
                         }
 
+                        nameHoverFormat = UtilsManager.translateLegacyToMiniMessage(nameHoverFormat)
+
                         sdn = sdn.hoverEvent(
                             HoverEvent.hoverEvent(
                                 HoverEvent.Action.SHOW_TEXT,
