@@ -71,4 +71,4 @@ anti-swear:
     - "trash"
 
 # Please, don't modify this version. It's used for internal purposes.
-config-version: 9
+config-version: 1

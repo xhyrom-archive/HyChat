@@ -25,4 +25,4 @@ modules:
     leave-message: "<gradient:#2fa4c4:#2fbfc4:#2fc4a9>HyChat</gradient> <dark_gray>| <gray><player> <red>left<gray> the game!"
 
 # Please, don't modify this version. It's used for internal purposes.
-config-version: 10
+config-version: 1
