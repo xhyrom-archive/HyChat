@@ -5,6 +5,7 @@ import me.xhyrom.hychat.HyChat
 import me.xhyrom.hychat.modules.AntiSpam
 import me.xhyrom.hychat.modules.AntiSwear
 import me.xhyrom.hychat.modules.MuteChat
+import me.xhyrom.hylib.api.managers.UtilsManager
 import net.kyori.adventure.text.TextReplacementConfig
 import net.kyori.adventure.text.event.ClickEvent
 import net.kyori.adventure.text.event.ClickEvent.Action
@@ -13,6 +14,7 @@ import net.kyori.adventure.text.minimessage.MiniMessage
 import net.kyori.adventure.text.minimessage.tag.resolver.Placeholder
 import net.kyori.adventure.text.minimessage.tag.resolver.TagResolver
 import net.kyori.adventure.text.minimessage.tag.standard.StandardTags
+import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer
 import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer
 import org.bukkit.event.EventHandler
 import org.bukkit.event.EventPriority
@@ -28,7 +30,7 @@ class ChatListener : Listener {
         "(https?://)?[a-z0-9]+(\\.[a-z0-9]+)*(\\.[a-z0-9]{1,10})((/+)[^/ ]*)*",
         Pattern.CASE_INSENSITIVE or Pattern.MULTILINE
     )
-    private val REPLACER = TextReplacementConfig.builder()
+    private val URL_REPLACER = TextReplacementConfig.builder()
         .match(URL_REGEX)
         .replacement { c ->
             c.clickEvent(
@@ -38,20 +40,19 @@ class ChatListener : Listener {
             )
         }
         .build()
-    private val safeMiniMessage: MiniMessage = MiniMessage.builder()
-        .tags(TagResolver.builder()
-            .resolver(StandardTags.color())
-            .resolver(StandardTags.decorations())
-            .resolver(StandardTags.gradient())
-            .resolver(StandardTags.rainbow())
-            .build()
-        )
-        .build()
 
     @EventHandler(priority = EventPriority.HIGHEST)
     fun onChatFormat(event: AsyncChatEvent) {
         if (HyChat.getInstance().config.getBoolean("clickable-links")) {
-            event.message(event.message().replaceText(REPLACER))
+            event.message(event.message().replaceText(URL_REPLACER))
+        }
+
+        if (event.player.hasPermission("hychat.colors")) {
+            event.message(
+                LegacyComponentSerializer.legacy('&').deserialize(
+                    PlainTextComponentSerializer.plainText().serialize(event.message())
+                )
+            )
         }
 
         if (!HyChat.getInstance().config.getBoolean("chat-format.enabled")) return
@@ -60,6 +61,13 @@ class ChatListener : Listener {
 
         if (HyChat.getInstance().getHooks().placeholderApi != null) {
             format = HyChat.getInstance().getHooks().placeholderApi!!.setPlaceholders(event.player, format).replace("%", "%%")
+        }
+
+        format = UtilsManager.translateLegacyToMiniMessage(format)
+
+        if (PlainTextComponentSerializer.plainText().serialize(event.message()).isBlank()) {
+            event.isCancelled = true
+            return
         }
 
         event.renderer { player, sourceDisplayName, message, _ ->

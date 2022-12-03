@@ -2,7 +2,9 @@ package me.xhyrom.hychat.modules
 
 import me.xhyrom.hychat.HyChat
 import me.xhyrom.hychat.listeners.antiSpamCooldown
+import net.kyori.adventure.text.Component
 import net.kyori.adventure.text.minimessage.MiniMessage
+import net.kyori.adventure.text.minimessage.tag.resolver.Placeholder
 import org.bukkit.event.player.AsyncPlayerChatEvent
 
 object AntiSpam {
@@ -14,8 +16,8 @@ object AntiSpam {
                 event.isCancelled = true
                 event.player.sendMessage(
                     MiniMessage.miniMessage().deserialize(
-                        HyChat.getInstance().localeGetStringPapi(event.player, "modules.anti-spam.cooldown")
-                            .replace("%cooldown%", formatTime(antiSpamCooldown[event.player.uniqueId]!! - System.currentTimeMillis()))
+                        HyChat.getInstance().localeGetStringPapi(event.player, "modules.anti-spam.cooldown"),
+                        Placeholder.component("cooldown", Component.text(formatTime(antiSpamCooldown[event.player.uniqueId]!! - System.currentTimeMillis())))
                     )
                 )
                 return true

@@ -20,6 +20,7 @@ dependencies {
     compileOnly("me.clip:placeholderapi:2.11.2")
 
     implementation("net.kyori:adventure-text-serializer-plain:4.12.0")
+    implementation("net.kyori:adventure-text-serializer-legacy:4.12.0")
 }
 
 java {

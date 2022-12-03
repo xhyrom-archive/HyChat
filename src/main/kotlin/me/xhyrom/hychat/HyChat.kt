@@ -13,7 +13,9 @@ import me.xhyrom.hylib.libs.commandapi.arguments.StringArgument
 import me.xhyrom.hylib.libs.commandapi.executors.CommandExecutor
 import me.xhyrom.hylib.libs.packetevents.api.PacketEvents
 import me.xhyrom.hylib.libs.packetevents.impl.factory.spigot.SpigotPacketEventsBuilder
+import net.kyori.adventure.text.Component
 import net.kyori.adventure.text.minimessage.MiniMessage
+import net.kyori.adventure.text.minimessage.tag.resolver.Placeholder
 import org.bukkit.Bukkit
 import org.bukkit.command.CommandSender
 import org.bukkit.entity.Player
@@ -100,10 +102,8 @@ class HyChat : JavaPlugin() {
                                             if (!config!!.reload()) {
                                                 sender.sendMessage(
                                                     MiniMessage.miniMessage().deserialize(
-                                                        locale().getString("commands.chat.reload.fail").replace(
-                                                            "%type%",
-                                                            "Chat"
-                                                        )
+                                                        locale().getString("commands.chat.reload.fail"),
+                                                        Placeholder.component("type", Component.text("Chat"))
                                                     )
                                                 )
 
@@ -112,10 +112,8 @@ class HyChat : JavaPlugin() {
 
                                             sender.sendMessage(
                                                 MiniMessage.miniMessage().deserialize(
-                                                    locale().getString("commands.chat.reload.success").replace(
-                                                        "%type%",
-                                                        "Chat"
-                                                    )
+                                                    locale().getString("commands.chat.reload.success"),
+                                                    Placeholder.component("type", Component.text("Chat"))
                                                 )
                                             )
                                         }
@@ -123,10 +121,8 @@ class HyChat : JavaPlugin() {
                                             if (!locale().reload()) {
                                                 sender.sendMessage(
                                                     MiniMessage.miniMessage().deserialize(
-                                                        locale().getString("commands.chat.reload.fail").replace(
-                                                            "%type%",
-                                                            "Language"
-                                                        )
+                                                        locale().getString("commands.chat.reload.fail"),
+                                                        Placeholder.component("type", Component.text("Language"))
                                                     )
                                                 )
 
@@ -135,10 +131,8 @@ class HyChat : JavaPlugin() {
 
                                             sender.sendMessage(
                                                 MiniMessage.miniMessage().deserialize(
-                                                    locale().getString("commands.chat.reload.success").replace(
-                                                        "%type%",
-                                                        "Language"
-                                                    )
+                                                    locale().getString("commands.chat.reload.success"),
+                                                    Placeholder.component("type", Component.text("Language"))
                                                 )
                                             )
                                         }
