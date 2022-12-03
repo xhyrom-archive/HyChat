@@ -1,6 +1,7 @@
 package me.xhyrom.hychat.modules
 
 import me.xhyrom.hychat.HyChat
+import me.xhyrom.hychat.structs.Utils
 import net.kyori.adventure.text.Component
 import net.kyori.adventure.text.minimessage.MiniMessage
 import net.kyori.adventure.text.minimessage.tag.resolver.Placeholder
@@ -11,10 +12,11 @@ object JoinAndLeave {
     fun handleJoin(event: PlayerJoinEvent) {
         if (!HyChat.getInstance().config.getBoolean("join-and-leave.join-enabled") || (event.player.hasPermission("hychat.join-and-leave.bypass-join") && !event.player.isOp)) return
 
-        val joinMessage = HyChat.getInstance().localeGetStringPapi(event.player, "modules.join-and-leave.join-message")
+        val joinMessage = HyChat.getInstance().locale().getString("modules.join-and-leave.join-message")
 
         event.joinMessage(MiniMessage.miniMessage().deserialize(
             joinMessage,
+            Utils.papiTag(event.player),
             Placeholder.component("player", Component.text(event.player.name)))
         )
     }
@@ -22,10 +24,11 @@ object JoinAndLeave {
     fun handleQuit(event: PlayerQuitEvent) {
         if (!HyChat.getInstance().config.getBoolean("join-and-leave.leave-enabled") || (event.player.hasPermission("hychat.join-and-leave.bypass-leave") && !event.player.isOp)) return
 
-        val quitMessage = HyChat.getInstance().localeGetStringPapi(event.player, "modules.join-and-leave.leave-message")
+        val quitMessage = HyChat.getInstance().locale().getString("modules.join-and-leave.leave-message")
 
         event.quitMessage(MiniMessage.miniMessage().deserialize(
             quitMessage,
+            Utils.papiTag(event.player),
             Placeholder.component("player", Component.text(event.player.name)))
         )
     }

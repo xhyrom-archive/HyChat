@@ -2,6 +2,7 @@ package me.xhyrom.hychat.modules
 
 import me.xhyrom.hychat.HyChat
 import me.xhyrom.hychat.listeners.antiSpamCooldown
+import me.xhyrom.hychat.structs.Utils
 import net.kyori.adventure.text.minimessage.MiniMessage
 import org.bukkit.event.player.AsyncPlayerChatEvent
 
@@ -15,7 +16,8 @@ object MuteChat {
             event.isCancelled = true
             event.player.sendMessage(
                 MiniMessage.miniMessage().deserialize(
-                    HyChat.getInstance().localeGetStringPapi(event.player, "modules.mute-chat.message")
+                    HyChat.getInstance().locale().getString("modules.mute-chat.message"),
+                    Utils.papiTag(event.player)
                 )
             )
 

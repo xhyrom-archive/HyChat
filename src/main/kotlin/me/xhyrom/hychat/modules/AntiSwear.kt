@@ -1,6 +1,7 @@
 package me.xhyrom.hychat.modules
 
 import me.xhyrom.hychat.HyChat
+import me.xhyrom.hychat.structs.Utils
 import net.kyori.adventure.text.minimessage.MiniMessage
 import org.bukkit.event.player.AsyncPlayerChatEvent
 
@@ -13,7 +14,8 @@ object AntiSwear {
             event.isCancelled = true
             event.player.sendMessage(
                 MiniMessage.miniMessage().deserialize(
-                    HyChat.getInstance().localeGetStringPapi(event.player, "modules.anti-swear.message")
+                    HyChat.getInstance().locale().getString("modules.anti-swear.message"),
+                    Utils.papiTag(event.player)
                 )
             )
 

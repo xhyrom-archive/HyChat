@@ -1,5 +1,5 @@
-# If you want to use PAPI, use %% instead <>
-# <> is for custom plugin placeholders
+# There is also PlaceholderAPI support with <papi:NAME OF PLACEHOLDER> for example <papi:luckperms_prefix>
+# There is some custom placeholders - you will see them in other comments
 
 commands:
   chat:

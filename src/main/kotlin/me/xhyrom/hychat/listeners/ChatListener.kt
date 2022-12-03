@@ -6,6 +6,7 @@ import me.xhyrom.hychat.modules.AntiSpam
 import me.xhyrom.hychat.modules.AntiSwear
 import me.xhyrom.hychat.modules.Mentions
 import me.xhyrom.hychat.modules.MuteChat
+import me.xhyrom.hychat.structs.Utils
 import me.xhyrom.hylib.api.managers.UtilsManager
 import net.kyori.adventure.audience.Audience
 import net.kyori.adventure.text.Component
@@ -62,13 +63,7 @@ class ChatListener : Listener {
         if (!HyChat.getInstance().config.getBoolean("chat-format.enabled")) return
 
         val mentions = Mentions.handle(event)
-        var format = HyChat.getInstance().config.getString("chat-format.format")!!
-
-        if (HyChat.getInstance().getHooks().placeholderApi != null) {
-            format = HyChat.getInstance().getHooks().placeholderApi!!.setPlaceholders(event.player, format).replace("%", "%%")
-        }
-
-        format = UtilsManager.translateLegacyToMiniMessage(format)
+        val format = HyChat.getInstance().config.getString("chat-format.format")!!
 
         if (PlainTextComponentSerializer.plainText().serialize(event.message()).isBlank()) {
             event.isCancelled = true
@@ -89,6 +84,7 @@ class ChatListener : Listener {
         var sdn = sourceDisplayName
         return MiniMessage.miniMessage().deserialize(
             format,
+            Utils.papiTag(player),
             Placeholder.component("message", message),
             Placeholder.component(
                 "player",
@@ -100,13 +96,12 @@ class ChatListener : Listener {
                             nameHoverFormat = HyChat.getInstance().getHooks().placeholderApi!!.setPlaceholders(player, nameHoverFormat).replace("%", "%%")
                         }
 
-                        nameHoverFormat = UtilsManager.translateLegacyToMiniMessage(nameHoverFormat)
-
                         sdn = sdn.hoverEvent(
                             HoverEvent.hoverEvent(
                                 HoverEvent.Action.SHOW_TEXT,
                                 MiniMessage.miniMessage().deserialize(
                                     nameHoverFormat,
+                                    Utils.papiTag(player),
                                     Placeholder.component("player", sourceDisplayName),
                                     Placeholder.component("message", message)
                                 )

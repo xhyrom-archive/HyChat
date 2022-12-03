@@ -151,14 +151,4 @@ class HyChat : JavaPlugin() {
     fun locale(): Config {
         return language!!.getLocale(config!!.getString("locale"))
     }
-
-    fun localeGetStringPapi(player: Player, path: String): String {
-        var msg = locale().getString(path)
-
-        if (getHooks().placeholderApi != null) {
-            msg = getHooks().placeholderApi!!.setPlaceholders(player, msg).replace("%", "%%")
-        }
-
-        return msg
-    }
 }

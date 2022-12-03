@@ -1,7 +1,7 @@
 locale: "en-US"
 
 # Custom chat format - use <player> for player name, <message> for message
-# There is also PlaceholderAPI support with %
+# There is also PlaceholderAPI support with <papi:NAME OF PLACEHOLDER> for example <papi:luckperms_prefix>
 # Use MiniMessage
 chat-format:
   enabled: true
