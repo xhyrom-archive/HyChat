@@ -17,7 +17,7 @@ repositories {
 
 dependencies {
     compileOnly("io.papermc.paper:paper-api:1.19.2-R0.1-SNAPSHOT")
-    compileOnly("com.github.xHyroM:HyLib:74c2c990")
+    compileOnly("com.github.xHyroM:HyLib:502fd0aa")
     compileOnly("me.clip:placeholderapi:2.11.2")
 
     implementation("net.kyori:adventure-text-serializer-plain:4.12.0")

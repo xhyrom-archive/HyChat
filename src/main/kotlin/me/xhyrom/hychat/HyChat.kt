@@ -8,6 +8,7 @@ import me.xhyrom.hychat.modules.MuteChat
 import me.xhyrom.hylib.api.HyLib
 import me.xhyrom.hylib.api.structs.Config
 import me.xhyrom.hylib.api.structs.Language
+import me.xhyrom.hylib.libs.commandapi.CommandAPICommand
 import me.xhyrom.hylib.libs.commandapi.arguments.ArgumentSuggestions
 import me.xhyrom.hylib.libs.commandapi.arguments.StringArgument
 import me.xhyrom.hylib.libs.commandapi.executors.CommandExecutor
@@ -64,7 +65,8 @@ class HyChat : JavaPlugin() {
             HyLib.getInstance().getCommandManager().createCommand("chat")
                 .withFullDescription("chat plugin management")
                 .withSubcommand(
-                    HyLib.getInstance().getCommandManager().createCommand("mute")
+                    CommandAPICommand("mute")
+                        .withFullDescription("mute or unmute chat")
                         .withPermission("hychat.command.mute")
                         .executes(
                             CommandExecutor { _: CommandSender, _: Array<Any?> ->
@@ -85,7 +87,8 @@ class HyChat : JavaPlugin() {
                             })
                 )
                 .withSubcommand(
-                    HyLib.getInstance().getCommandManager().createCommand("reload")
+                    CommandAPICommand("reload")
+                        .withFullDescription("reload config")
                         .withPermission("hychat.command.reload")
                         .withArguments(
                             StringArgument("type").includeSuggestions(
