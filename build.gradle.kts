@@ -7,6 +7,7 @@ plugins {
 
 group = "me.xhyrom.hychat"
 version = "1.0.0"
+description = "A powerful and lightweight chat plugin for minecraft servers."
 
 repositories {
     mavenCentral()
@@ -22,6 +23,19 @@ dependencies {
 
     implementation("net.kyori:adventure-text-serializer-plain:4.12.0")
     implementation("net.kyori:adventure-text-serializer-legacy:4.12.0")
+}
+
+tasks.processResources {
+    duplicatesStrategy = DuplicatesStrategy.INCLUDE
+    from(sourceSets.main.get().resources.srcDirs) {
+        filter(
+            org.apache.tools.ant.filters.ReplaceTokens::class, "tokens" to mapOf(
+                "name" to project.name,
+                "version" to project.version,
+                "description" to project.description,
+            )
+        )
+    }
 }
 
 java {

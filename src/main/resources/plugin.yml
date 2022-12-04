@@ -1,5 +1,6 @@
-name: HyChat
-version: 1.0.0
+name: @name@
+version: @version@
+description: @description@
 main: me.xhyrom.hychat.HyChat
 author: xHyroM#2815
 api-version: 1.19
