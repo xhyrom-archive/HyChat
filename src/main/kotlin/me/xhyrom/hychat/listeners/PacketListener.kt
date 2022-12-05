@@ -25,7 +25,7 @@ class PacketListener : PacketListenerAbstract(PacketListenerPriority.LOW) {
                 serverData.isEnforceSecureChat = true
             }
             PacketType.Play.Server.CHAT_MESSAGE -> {
-                if (!HyChat.getInstance().config.getBoolean("no-chat-reports.disable-popup")) return
+                if (!HyChat.getInstance().chatConfig().getBoolean("no-chat-reports.disable-popup").get()) return
 
                 val chatMessage = WrapperPlayServerChatMessage(event)
 
@@ -37,7 +37,7 @@ class PacketListener : PacketListenerAbstract(PacketListenerPriority.LOW) {
                 }
             }
             PacketType.Play.Server.PLAYER_CHAT_HEADER -> {
-                if (HyChat.getInstance().config.getBoolean("no-chat-reports.send-header-chat-packet")) return
+                if (HyChat.getInstance().chatConfig().getBoolean("no-chat-reports.send-header-chat-packet").get()) return
 
                 event.isCancelled = true
             }

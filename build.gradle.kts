@@ -13,12 +13,14 @@ repositories {
     mavenCentral()
     maven("https://repo.papermc.io/repository/maven-public/")
     maven("https://repo.extendedclip.com/content/repositories/placeholderapi/")
+    maven("https://repo.jopga.me/releases")
     maven("https://jitpack.io")
 }
 
 dependencies {
     compileOnly("io.papermc.paper:paper-api:1.19.2-R0.1-SNAPSHOT")
-    compileOnly("com.github.xHyroM:HyLib:502fd0aa")
+    compileOnly("me.xhyrom.hylib:hylib-bukkit:1.0.0")
+    compileOnly(files("libs/HyLib-Bukkit-0.1.1-api.jar"))
     compileOnly("me.clip:placeholderapi:2.11.2")
 
     implementation("net.kyori:adventure-text-serializer-plain:4.12.0")

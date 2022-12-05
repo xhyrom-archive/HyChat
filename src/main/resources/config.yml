@@ -13,7 +13,7 @@ chat-format:
         <gradient:#2fa4c4:#2fbfc4:#2fc4a9>HyChat</gradient>
         <dark_gray>| <gray>Player: <white><player>
         <dark_gray>| <gray>Message: <white><message>
-        <dark_gray>| <gray>Rank: <white>%luckperms_prefix%
+        <dark_gray>| <gray>Rank: <white><papi:luckperms_prefix>
     on-click:
       enabled: true
       action: "suggest_command"

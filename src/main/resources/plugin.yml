@@ -8,4 +8,4 @@ softdepend:
   - PlaceholderAPI
 
 depend:
-  - HyLib
+  - hylib-bukkit

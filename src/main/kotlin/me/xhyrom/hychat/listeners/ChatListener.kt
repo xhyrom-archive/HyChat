@@ -7,8 +7,6 @@ import me.xhyrom.hychat.modules.AntiSwear
 import me.xhyrom.hychat.modules.Mentions
 import me.xhyrom.hychat.modules.MuteChat
 import me.xhyrom.hychat.structs.Utils
-import me.xhyrom.hylib.api.managers.UtilsManager
-import net.kyori.adventure.audience.Audience
 import net.kyori.adventure.text.Component
 import net.kyori.adventure.text.TextReplacementConfig
 import net.kyori.adventure.text.event.ClickEvent
@@ -16,8 +14,6 @@ import net.kyori.adventure.text.event.ClickEvent.Action
 import net.kyori.adventure.text.event.HoverEvent
 import net.kyori.adventure.text.minimessage.MiniMessage
 import net.kyori.adventure.text.minimessage.tag.resolver.Placeholder
-import net.kyori.adventure.text.minimessage.tag.resolver.TagResolver
-import net.kyori.adventure.text.minimessage.tag.standard.StandardTags
 import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer
 import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer
 import org.bukkit.entity.Player
@@ -56,14 +52,14 @@ class ChatListener : Listener {
             )
         }
 
-        if (HyChat.getInstance().config.getBoolean("clickable-links")) {
+        if (HyChat.getInstance().chatConfig().getBoolean("clickable-links").get()) {
             event.message(event.message().replaceText(URL_REPLACER))
         }
 
-        if (!HyChat.getInstance().config.getBoolean("chat-format.enabled")) return
+        if (!HyChat.getInstance().chatConfig().getBoolean("chat-format.enabled").get()) return
 
         val mentions = Mentions.handle(event)
-        val format = HyChat.getInstance().config.getString("chat-format.format")!!
+        val format = HyChat.getInstance().chatConfig().getString("chat-format.format").get()
 
         if (PlainTextComponentSerializer.plainText().serialize(event.message()).isBlank()) {
             event.isCancelled = true
@@ -89,8 +85,8 @@ class ChatListener : Listener {
             Placeholder.component(
                 "player",
                 run {
-                    if (HyChat.getInstance().config.getBoolean("chat-format.name-hover.message.enabled")) {
-                        var nameHoverFormat = HyChat.getInstance().config.getString("chat-format.name-hover.message.format")!!
+                    if (HyChat.getInstance().chatConfig().getBoolean("chat-format.name-hover.message.enabled").get()) {
+                        var nameHoverFormat = HyChat.getInstance().chatConfig().getString("chat-format.name-hover.message.format").get()
 
                         if (HyChat.getInstance().getHooks().placeholderApi != null) {
                             nameHoverFormat = HyChat.getInstance().getHooks().placeholderApi!!.setPlaceholders(player, nameHoverFormat).replace("%", "%%")
@@ -109,9 +105,9 @@ class ChatListener : Listener {
                         )
                     }
 
-                    if (HyChat.getInstance().config.getBoolean("chat-format.name-hover.on-click.enabled")) {
-                        val nameHoverClickAction = HyChat.getInstance().config.getString("chat-format.name-hover.on-click.action")!!
-                        var nameHoverClickValue = HyChat.getInstance().config.getString("chat-format.name-hover.on-click.value")!!
+                    if (HyChat.getInstance().chatConfig().getBoolean("chat-format.name-hover.on-click.enabled").get()) {
+                        val nameHoverClickAction = HyChat.getInstance().chatConfig().getString("chat-format.name-hover.on-click.action").get()
+                        var nameHoverClickValue = HyChat.getInstance().chatConfig().getString("chat-format.name-hover.on-click.value").get()
                             .replace("<player>", PlainTextComponentSerializer.plainText().serialize(sourceDisplayName))
                             .replace("<message>", PlainTextComponentSerializer.plainText().serialize(message))
 

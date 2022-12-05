@@ -10,14 +10,14 @@ import org.bukkit.event.player.AsyncPlayerChatEvent
 
 object AntiSpam {
     fun handle(event: AsyncPlayerChatEvent): Boolean {
-        if (!HyChat.getInstance().config.getBoolean("anti-spam.enabled") || event.player.hasPermission("hychat.anti-spam.bypass")) return false
+        if (!HyChat.getInstance().chatConfig().getBoolean("anti-spam.enabled").get() || event.player.hasPermission("hychat.anti-spam.bypass")) return false
 
         if (antiSpamCooldown[event.player.uniqueId] != null) {
             if (antiSpamCooldown[event.player.uniqueId]!! > System.currentTimeMillis()) {
                 event.isCancelled = true
                 event.player.sendMessage(
                     MiniMessage.miniMessage().deserialize(
-                        HyChat.getInstance().locale().getString("modules.anti-spam.cooldown"),
+                        HyChat.getInstance().locale().getString("modules.anti-spam.cooldown").get(),
                         Utils.papiTag(event.player),
                         Placeholder.component("cooldown", Component.text(formatTime(antiSpamCooldown[event.player.uniqueId]!! - System.currentTimeMillis())))
                     )
@@ -26,7 +26,7 @@ object AntiSpam {
             }
         }
 
-        val defaultCooldown = HyChat.getInstance().config.getLong("anti-spam.cooldown")
+        val defaultCooldown = HyChat.getInstance().chatConfig().getLong("anti-spam.cooldown").get()
 
         for (permission in event.player.effectivePermissions) {
             if (!permission.permission.startsWith("hychat.anti-spam.cooldown.")) continue

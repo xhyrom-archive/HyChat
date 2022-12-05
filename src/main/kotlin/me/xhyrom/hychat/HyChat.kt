@@ -5,9 +5,11 @@ import me.xhyrom.hychat.listeners.ChatListener
 import me.xhyrom.hychat.listeners.PacketListener
 import me.xhyrom.hychat.listeners.PlayerListener
 import me.xhyrom.hychat.modules.MuteChat
-import me.xhyrom.hylib.api.HyLib
-import me.xhyrom.hylib.api.structs.Config
-import me.xhyrom.hylib.api.structs.Language
+import me.xhyrom.hylib.bukkit.api.structs.BukkitCommand
+import me.xhyrom.hylib.common.api.HyLibProvider
+import me.xhyrom.hylib.common.api.structs.Command
+import me.xhyrom.hylib.common.api.structs.Config
+import me.xhyrom.hylib.common.api.structs.Language
 import me.xhyrom.hylib.libs.commandapi.CommandAPICommand
 import me.xhyrom.hylib.libs.commandapi.arguments.ArgumentSuggestions
 import me.xhyrom.hylib.libs.commandapi.arguments.StringArgument
@@ -19,9 +21,8 @@ import net.kyori.adventure.text.minimessage.MiniMessage
 import net.kyori.adventure.text.minimessage.tag.resolver.Placeholder
 import org.bukkit.Bukkit
 import org.bukkit.command.CommandSender
-import org.bukkit.entity.Player
 import org.bukkit.plugin.java.JavaPlugin
-
+import java.io.File
 
 class HyChat : JavaPlugin() {
     companion object {
@@ -32,7 +33,7 @@ class HyChat : JavaPlugin() {
         }
     }
 
-    private var config: Config? = null
+    private var chatConfig: Config? = null
     private var language: Language? = null
     private var hooks: HooksManager? = null
 
@@ -46,10 +47,12 @@ class HyChat : JavaPlugin() {
         instance = this
 
         hooks = HooksManager()
-        config = HyLib.getInstance().getConfigManager().register(this, "config")
-        language = HyLib.getInstance().getLanguageManager().register(this)
+        chatConfig = HyLibProvider.get().getConfigManager().register(File(this.dataFolder, "config.yml").path, this.getResource("config.yml")!!)
+        language = HyLibProvider.get().getLanguageManager().register(this.dataFolder.path) { path ->
+            this.getResource(path)!!
+        }
 
-        HyLib.getInstance().getBStatsManager().registerAddon(this, 17003, config!!)
+        HyLibProvider.get().getBStatsManager().registerAddon(this, 17003, chatConfig())
 
         server.pluginManager.registerEvents(ChatListener(), this)
         server.pluginManager.registerEvents(PlayerListener(), this)
@@ -61,11 +64,11 @@ class HyChat : JavaPlugin() {
     }
 
     private fun createCommand() {
-        HyLib.getInstance().getCommandManager().addSubCommand(
-            HyLib.getInstance().getCommandManager().createCommand("chat")
+        HyLibProvider.get().getCommandManager().register(
+            (HyLibProvider.get().getCommandManager().create("chat") as BukkitCommand)
                 .withFullDescription("chat plugin management")
                 .withSubcommand(
-                    CommandAPICommand("mute")
+                    BukkitCommand("mute")
                         .withFullDescription("mute or unmute chat")
                         .withPermission("hychat.command.mute")
                         .executes(
@@ -79,7 +82,7 @@ class HyChat : JavaPlugin() {
                                                 locale().getString(
                                                     if (MuteChat.isMuted) "commands.chat.mute.muted"
                                                     else "commands.chat.mute.unmuted"
-                                                )
+                                                ).get()
                                             )
                                         )
                                     }
@@ -87,7 +90,7 @@ class HyChat : JavaPlugin() {
                             })
                 )
                 .withSubcommand(
-                    CommandAPICommand("reload")
+                    BukkitCommand("reload")
                         .withFullDescription("reload config")
                         .withPermission("hychat.command.reload")
                         .withArguments(
@@ -103,10 +106,10 @@ class HyChat : JavaPlugin() {
                                 run {
                                     when (args[0] as String) {
                                         "config" -> {
-                                            if (!config!!.reload()) {
+                                            if (!chatConfig().reload()) {
                                                 sender.sendMessage(
                                                     MiniMessage.miniMessage().deserialize(
-                                                        locale().getString("commands.chat.reload.fail"),
+                                                        locale().getString("commands.chat.reload.fail").get(),
                                                         Placeholder.component("type", Component.text("Chat"))
                                                     )
                                                 )
@@ -116,7 +119,7 @@ class HyChat : JavaPlugin() {
 
                                             sender.sendMessage(
                                                 MiniMessage.miniMessage().deserialize(
-                                                    locale().getString("commands.chat.reload.success"),
+                                                    locale().getString("commands.chat.reload.success").get(),
                                                     Placeholder.component("type", Component.text("Chat"))
                                                 )
                                             )
@@ -125,7 +128,7 @@ class HyChat : JavaPlugin() {
                                             if (!locale().reload()) {
                                                 sender.sendMessage(
                                                     MiniMessage.miniMessage().deserialize(
-                                                        locale().getString("commands.chat.reload.fail"),
+                                                        locale().getString("commands.chat.reload.fail").get(),
                                                         Placeholder.component("type", Component.text("Language"))
                                                     )
                                                 )
@@ -135,7 +138,7 @@ class HyChat : JavaPlugin() {
 
                                             sender.sendMessage(
                                                 MiniMessage.miniMessage().deserialize(
-                                                    locale().getString("commands.chat.reload.success"),
+                                                    locale().getString("commands.chat.reload.success").get(),
                                                     Placeholder.component("type", Component.text("Language"))
                                                 )
                                             )
@@ -144,7 +147,7 @@ class HyChat : JavaPlugin() {
                                 }
                             }
                         )
-                )
+                ) as Command
         )
     }
 
@@ -153,6 +156,10 @@ class HyChat : JavaPlugin() {
     }
 
     fun locale(): Config {
-        return language!!.getLocale(config!!.getString("locale"))
+        return language!!.getLang(chatConfig().getString("locale").get())
+    }
+
+    fun chatConfig(): Config {
+        return chatConfig!!
     }
 }

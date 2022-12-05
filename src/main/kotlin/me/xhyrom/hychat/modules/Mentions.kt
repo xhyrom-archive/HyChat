@@ -21,14 +21,14 @@ object Mentions {
         .match(MENTION_REGEX)
         .replacement { c ->
             MiniMessage.miniMessage().deserialize(
-                HyChat.getInstance().config.getString("mention-system.highlight-color")!!,
+                HyChat.getInstance().chatConfig().getString("mention-system.highlight-color").get(),
                 Placeholder.component("player", c)
             )
         }
         .build()
 
     fun handle(event: AsyncChatEvent): Mention {
-        if (!HyChat.getInstance().config.getBoolean("mention-system.enabled")) return Mention(emptyList(), event.message())
+        if (!HyChat.getInstance().chatConfig().getBoolean("mention-system.enabled").get()) return Mention(emptyList(), event.message())
 
         val mentions = MENTION_REGEX.toRegex().findAll(PlainTextComponentSerializer.plainText().serialize(event.message()))
         val players = mentions.map { it.value.substring(1) }.mapNotNull { HyChat.getInstance().server.getPlayer(it) }.toList()
