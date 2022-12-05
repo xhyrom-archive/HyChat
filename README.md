@@ -10,7 +10,7 @@
     <a href="https://bstats.org/plugin/bukkit/HyChat" alt="bstats servers">
         <img src="https://img.shields.io/bstats/servers/17003?color=2fbfc4&style=for-the-badge" />
     </a>
-    <a href="https://bstats.org/plugin/bukkit/EcoPets" alt="bstats players">
+    <a href="https://bstats.org/plugin/bukkit/HyChat" alt="bstats players">
         <img src="https://img.shields.io/bstats/players/17003?color=2fbfc4&style=for-the-badge" />
     </a>
     <a href="https://discord.gg/kFPKmEKeMS/" alt="Discord">
