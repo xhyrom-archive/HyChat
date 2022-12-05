@@ -60,4 +60,4 @@ jobs:
         draft: false
         prerelease: false
         files: |
-          build/libs/HyLib-*.jar
+          build/libs/HyChat-*.jar
