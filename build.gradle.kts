@@ -1,6 +1,8 @@
 plugins {
     id("java-library")
     id("java")
+    id("maven-publish")
+    id("com.github.johnrengelman.shadow") version "7.1.2"
     kotlin("jvm") version "1.6.21"
     application
 }
@@ -11,6 +13,7 @@ description = "A powerful and lightweight chat plugin for minecraft servers."
 
 repositories {
     mavenCentral()
+    gradlePluginPortal()
     maven("https://repo.papermc.io/repository/maven-public/")
     maven("https://repo.extendedclip.com/content/repositories/placeholderapi/")
     maven("https://repo.jopga.me/releases")
@@ -40,6 +43,43 @@ tasks.processResources {
     }
 }
 
+tasks {
+    shadowJar {
+        exclude("kotlin/**")
+        archiveFileName.set("HyChat-${project.version}-all.jar")
+    }
+    named("build") {
+        dependsOn(shadowJar)
+    }
+}
+
 java {
     toolchain.languageVersion.set(JavaLanguageVersion.of(17))
+}
+
+application {
+    mainClass.set("me.xhyrom.hychat.HyChat")
+}
+
+publishing {
+    publications.create<MavenPublication>("maven") {
+        artifact(tasks["shadowJar"])
+
+        repositories.maven {
+            url = uri("https://repo.jopga.me/releases")
+
+            credentials(PasswordCredentials::class)
+            authentication {
+                create<BasicAuthentication>("basic")
+            }
+        }
+
+        groupId = rootProject.group as String
+        artifactId = project.name
+        version = rootProject.version as String
+
+        pom {
+            name.set("HyChat")
+        }
+    }
 }

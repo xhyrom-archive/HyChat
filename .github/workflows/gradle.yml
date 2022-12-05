@@ -13,9 +13,6 @@ on:
   pull_request:
     branches: [ "main" ]
 
-permissions:
-  contents: read
-
 jobs:
   build:
 
@@ -32,8 +29,35 @@ jobs:
       uses: gradle/gradle-build-action@7b3886699e7f5156c2650e6861b32ea2356df4d6
       with:
         arguments: build
+
     - name: Upload build libs
       uses: actions/upload-artifact@v3
       with:
         name: build-libs
         path: build/libs/
+
+    - name: Upload build libs to reposilite
+      if: ${{ github.event.inputs.release }}
+      uses: gradle/gradle-build-action@7b3886699e7f5156c2650e6861b32ea2356df4d6
+      with:
+        arguments: publish -PmavenUsername=${{ secrets.REPOSILITE_USERNAME }} -PmavenPassword=${{ secrets.REPOSILITE_PASSWORD }}
+
+    - uses: dev-drprasad/delete-tag-and-release@085c6969f18bad0de1b9f3fe6692a3cd01f64fe5
+      with:
+        delete_release: true
+        tag_name: dev
+      continue-on-error: true
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+    - name: Create the release
+      uses: softprops/action-gh-release@1e07f4398721186383de40550babbdf2b84acfc5
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        tag_name: dev
+        name: Dev Build ${{ steps.vars.outputs.sha_short }}
+        draft: false
+        prerelease: false
+        files: |
+          build/libs/HyLib-*.jar
