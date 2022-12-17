@@ -8,7 +8,7 @@ plugins {
 }
 
 group = "me.xhyrom.hychat"
-version = "1.0.0"
+version = "1.1.0"
 description = "A powerful and lightweight chat plugin for minecraft servers."
 
 repositories {
