@@ -15,7 +15,12 @@ object AntiSwear {
 
         val blockedWords = HyChat.getInstance().chatConfig().getStringList("anti-swear.blocked-words").get()
 
-        if (blockedWords.any { event.message.contains(it, ignoreCase = true) || checkSimilarity(event.message, it) }) {
+        if (blockedWords.any { blockedWord ->
+                event.message.contains(blockedWord, ignoreCase = true) ||
+                checkSimilarity(
+                    event.message.filter { it.isLetterOrDigit() }, blockedWord.filter { it.isLetterOrDigit() }
+                )
+        }) {
             event.isCancelled = true
             event.player.sendMessage(
                 MiniMessage.miniMessage().deserialize(
