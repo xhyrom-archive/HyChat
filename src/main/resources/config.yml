@@ -64,6 +64,18 @@ anti-spam:
 anti-swear:
   # Enable antiswear
   enabled: true
+  # Check jaro winkler distance
+  # If the distance is lower than the threshold, the message will be blocked
+  # Jaro–Winkler distance is a string metric measuring an edit distance between two sequences. It is a variant proposed in 1990 by William E. Winkler of the Jaro distance metric
+  jaro-winkler-distance:
+    check: true
+    threshold: 0.9
+  # Check levenshtein distance
+  # If the distance is lower than the threshold, the message will be blocked
+  # Levenshtein distance is a string metric for measuring the difference between two sequences
+  levenshtein-distance:
+    check: true
+    threshold: 0.8
   # List of words to block
   # You can override this with the permission "hychat.anti-swear.bypass.X"
   blocked-words:
@@ -75,4 +87,4 @@ anti-swear:
 send-metrics: true
 
 # Please, don't modify this version. It's used for internal purposes.
-config-version: 1
+config-version: 2
