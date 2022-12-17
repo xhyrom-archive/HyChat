@@ -33,12 +33,12 @@ object AntiSwear {
     private fun checkSimilarity(s1: String, s2: String): Boolean {
         if (
             HyChat.getInstance().chatConfig().getBoolean("anti-swear.jaro-winkler-distance.check").get() &&
-            StringUtils.getJaroWinklerDistance(s1, s2) >= HyChat.getInstance().chatConfig().getDouble("anti-swear.jaro-winkler-distance.threshold").get()
+            StringUtils.getJaroWinklerDistance(s1.lowercase(), s2.lowercase()) >= HyChat.getInstance().chatConfig().getDouble("anti-swear.jaro-winkler-distance.threshold").get()
         ) return true
 
         if (
             HyChat.getInstance().chatConfig().getBoolean("anti-swear.levenshtein-distance.check").get() &&
-            findSimilarityLevenshteinDistance(s1, s2) >= HyChat.getInstance().chatConfig().getDouble("anti-swear.levenshtein-distance.threshold").get()
+            findSimilarityLevenshteinDistance(s1.lowercase(), s2.lowercase()) >= HyChat.getInstance().chatConfig().getDouble("anti-swear.levenshtein-distance.threshold").get()
         ) return true
 
         return false
