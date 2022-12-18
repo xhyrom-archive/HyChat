@@ -52,7 +52,10 @@ class ChatListener : Listener {
             )
         }
 
-        if (HyChat.getInstance().chatConfig().getBoolean("clickable-links").get()) {
+        if (
+            HyChat.getInstance().chatConfig().getBoolean("clickable-links").get() ||
+            event.player.hasPermission("hychat.clickable-links.bypass")
+        ) {
             event.message(event.message().replaceText(URL_REPLACER))
         }
 

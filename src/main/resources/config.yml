@@ -21,6 +21,7 @@ chat-format:
 
 # Clickable links in chat
 # Allows to click on links and open them in browser
+# If you want to force enable, use: hychat.clickable-links.bypass permission
 clickable-links: true
 
 # Mentioning players in chat
@@ -34,6 +35,7 @@ mention-system:
 # No chat reports settings
 # With the chat format, messages are already automatically made as system messages, but this can disable the popup :)
 no-chat-reports:
+  enforce-secure-chat: true
   # Disable "not secure" popup
   disable-popup: true
   # Not required because chat reports are disabled
@@ -87,4 +89,4 @@ anti-swear:
 send-metrics: true
 
 # Please, don't modify this version. It's used for internal purposes.
-config-version: 2
+config-version: 3

@@ -5,6 +5,7 @@ import me.xhyrom.hylib.libs.packetevents.api.event.PacketListenerAbstract
 import me.xhyrom.hylib.libs.packetevents.api.event.PacketListenerPriority
 import me.xhyrom.hylib.libs.packetevents.api.event.PacketSendEvent
 import me.xhyrom.hylib.libs.packetevents.api.protocol.chat.message.ChatMessage_v1_19_1
+import me.xhyrom.hylib.libs.packetevents.api.protocol.chat.message.ChatMessage_v1_19_3
 import me.xhyrom.hylib.libs.packetevents.api.protocol.packettype.PacketType
 import me.xhyrom.hylib.libs.packetevents.api.wrapper.play.server.WrapperPlayServerChatMessage
 import me.xhyrom.hylib.libs.packetevents.api.wrapper.play.server.WrapperPlayServerServerData
@@ -21,6 +22,8 @@ class PacketListener : PacketListenerAbstract(PacketListenerPriority.LOW) {
                 wrapper.component = newObj
             }
             PacketType.Play.Server.SERVER_DATA -> {
+                if (!HyChat.getInstance().chatConfig().getBoolean("no-chat-reports.enforce-secure-chat").get()) return
+
                 val serverData = WrapperPlayServerServerData(event)
                 serverData.isEnforceSecureChat = true
             }
@@ -34,6 +37,12 @@ class PacketListener : PacketListenerAbstract(PacketListenerPriority.LOW) {
                     (chatMessage.message as ChatMessage_v1_19_1).salt = 0
                     (chatMessage.message as ChatMessage_v1_19_1).senderUUID = UUID(0L, 0L)
                     (chatMessage.message as ChatMessage_v1_19_1).previousSignature = null
+                }
+
+                if (chatMessage.message is ChatMessage_v1_19_3) {
+                    (chatMessage.message as ChatMessage_v1_19_3).signature = byteArrayOf()
+                    (chatMessage.message as ChatMessage_v1_19_3).salt = 0
+                    (chatMessage.message as ChatMessage_v1_19_3).senderUUID = UUID(0L, 0L)
                 }
             }
             PacketType.Play.Server.PLAYER_CHAT_HEADER -> {
