@@ -28,7 +28,7 @@ class PacketListener : PacketListenerAbstract(PacketListenerPriority.LOW) {
                 serverData.isEnforceSecureChat = true
             }
             PacketType.Play.Server.CHAT_MESSAGE -> {
-                if (!HyChat.getInstance().chatConfig().getBoolean("no-chat-reports.disable-popup").get()) return
+                if (!HyChat.getInstance().chatConfig().getBoolean("no-chat-reports.strip-signature").get()) return
 
                 val chatMessage = WrapperPlayServerChatMessage(event)
 

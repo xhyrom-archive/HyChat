@@ -36,8 +36,7 @@ mention-system:
 # With the chat format, messages are already automatically made as system messages, but this can disable the popup :)
 no-chat-reports:
   enforce-secure-chat: true
-  # Disable "not secure" popup
-  disable-popup: true
+  strip-signature: true
   # Not required because chat reports are disabled
   send-header-chat-packet: false
 
