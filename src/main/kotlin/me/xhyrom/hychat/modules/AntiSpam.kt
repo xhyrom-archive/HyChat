@@ -6,6 +6,7 @@ import me.xhyrom.hychat.structs.Utils
 import net.kyori.adventure.text.Component
 import net.kyori.adventure.text.minimessage.MiniMessage
 import net.kyori.adventure.text.minimessage.tag.resolver.Placeholder
+import org.bukkit.Bukkit
 import org.bukkit.event.player.AsyncPlayerChatEvent
 
 object AntiSpam {
@@ -14,14 +15,44 @@ object AntiSpam {
 
         if (antiSpamCooldown[event.player.uniqueId] != null) {
             if (antiSpamCooldown[event.player.uniqueId]!! > System.currentTimeMillis()) {
-                event.isCancelled = true
-                event.player.sendMessage(
-                    MiniMessage.miniMessage().deserialize(
-                        HyChat.getInstance().locale().getString("modules.anti-spam.cooldown").get(),
-                        Utils.papiTag(event.player),
-                        Placeholder.component("cooldown", Component.text(formatTime(antiSpamCooldown[event.player.uniqueId]!! - System.currentTimeMillis())))
-                    )
-                )
+                for (action in HyChat.getInstance().chatConfig().getStringList("anti-spam.actions").get()) {
+                    when (action) {
+                        "hychat::send-message" -> {
+                            event.player.sendMessage(
+                                MiniMessage.miniMessage().deserialize(
+                                    HyChat.getInstance().locale().getString("modules.anti-spam.cooldown").get(),
+                                    Utils.papiTag(event.player),
+                                    Placeholder.component("cooldown", Component.text(formatTime(antiSpamCooldown[event.player.uniqueId]!! - System.currentTimeMillis())))
+                                )
+                            )
+                        }
+                        "hychat::notify" -> {
+                            Utils.notifyAdmins(
+                                "anti-spam",
+                                event.player,
+                                event.message,
+                            )
+                        }
+                        "hychat::cancel" -> {
+                            event.isCancelled = true
+                            return true
+                        }
+                        else -> {
+                            if (HyChat.getInstance().getHooks().placeholderApi != null) {
+                                Bukkit.dispatchCommand(
+                                    Bukkit.getConsoleSender(),
+                                    HyChat.getInstance().getHooks().placeholderApi!!.setPlaceholders(event.player, action.replace("<player>", event.player.name))
+                                )
+                            } else {
+                                Bukkit.dispatchCommand(
+                                    Bukkit.getConsoleSender(),
+                                    action.replace("<player>", event.player.name)
+                                )
+                            }
+                        }
+                    }
+                }
+
                 return true
             }
         }

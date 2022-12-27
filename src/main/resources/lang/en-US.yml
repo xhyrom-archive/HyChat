@@ -15,8 +15,12 @@ modules:
   anti-spam:
     # Main placeholders: <cooldown>
     cooldown: "<gradient:#2fa4c4:#2fbfc4:#2fc4a9>HyChat</gradient> <dark_gray>| <gray>You can't send messages so fast! Please wait <red><cooldown><gray>"
+    # Main placeholders: <player> <message>
+    notify: "<gradient:#2fa4c4:#2fbfc4:#2fc4a9>HyChat</gradient> <dark_gray>| <gray><player> <red>tried to spam<gray>!"
   anti-swear:
     message: "<gradient:#2fa4c4:#2fbfc4:#2fc4a9>HyChat</gradient> <dark_gray>| <gray>Don't swear!"
+    # Main placeholders: <player> <message>
+    notify: "<gradient:#2fa4c4:#2fbfc4:#2fc4a9>HyChat</gradient> <dark_gray>| <gray><player> <red>tried to swear<gray>, message: <white><message>"
   mute-chat:
     message: "<gradient:#2fa4c4:#2fbfc4:#2fc4a9>HyChat</gradient> <dark_gray>| <gray>Chat is muted, you can't send messages!"
   join-and-leave:
@@ -25,4 +29,4 @@ modules:
     leave-message: "<gradient:#2fa4c4:#2fbfc4:#2fc4a9>HyChat</gradient> <dark_gray>| <gray><player> <red>left<gray> the game!"
 
 # Please, don't modify this version. It's used for internal purposes.
-config-version: 1
+config-version: 2

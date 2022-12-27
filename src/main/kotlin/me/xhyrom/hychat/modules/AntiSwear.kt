@@ -4,7 +4,9 @@ import me.xhyrom.hychat.HyChat
 import me.xhyrom.hychat.structs.Utils
 import net.kyori.adventure.text.minimessage.MiniMessage
 import org.apache.commons.lang3.StringUtils
+import org.bukkit.Bukkit
 import org.bukkit.event.player.AsyncPlayerChatEvent
+import org.bukkit.plugin.Plugin
 
 import kotlin.math.max
 import kotlin.math.min
@@ -21,13 +23,48 @@ object AntiSwear {
                     event.message.filter { it.isLetterOrDigit() }, blockedWord.filter { it.isLetterOrDigit() }
                 )
         }) {
-            event.isCancelled = true
-            event.player.sendMessage(
-                MiniMessage.miniMessage().deserialize(
-                    HyChat.getInstance().locale().getString("modules.anti-swear.message").get(),
-                    Utils.papiTag(event.player)
-                )
-            )
+            for (action in HyChat.getInstance().chatConfig().getStringList("anti-swear.actions").get()) {
+                when (action) {
+                    "hychat::send-message" -> {
+                        event.player.sendMessage(
+                            MiniMessage.miniMessage().deserialize(
+                                HyChat.getInstance().locale().getString("modules.anti-swear.message").get(),
+                                Utils.papiTag(event.player)
+                            )
+                        )
+                    }
+                    "hychat::notify" -> {
+                        Utils.notifyAdmins(
+                            "anti-swear",
+                            event.player,
+                            event.message,
+                        )
+                    }
+                    "hychat::cancel" -> {
+                        event.isCancelled = true
+                    }
+                    else -> {
+                        if (HyChat.getInstance().getHooks().placeholderApi != null) {
+                            Bukkit.getScheduler().runTask(HyChat.getInstance(), Runnable {
+                                Bukkit.dispatchCommand(
+                                    Bukkit.getConsoleSender(),
+                                    HyChat.getInstance().getHooks().placeholderApi!!.setPlaceholders(
+                                        event.player,
+                                        action.replace("<player>", event.player.name)
+                                    )
+                                )
+                            })
+                        } else {
+                            Bukkit.getScheduler().runTask(HyChat.getInstance(), Runnable {
+                                Bukkit.dispatchCommand(
+                                    Bukkit.getConsoleSender(),
+                                    action.replace("<player>", event.player.name)
+                                )
+                            })
+                        }
+                    }
+                }
+            }
 
             return true
         }

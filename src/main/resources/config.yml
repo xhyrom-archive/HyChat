@@ -34,11 +34,12 @@ mention-system:
 
 # No chat reports settings
 # With the chat format, messages are already automatically made as system messages, but this can disable the popup :)
+# WORKS ONLY ON 1.19.2
 no-chat-reports:
-  enforce-secure-chat: true
-  strip-signature: true
+  enforce-secure-chat: false
+  strip-signature: false
   # Not required because chat reports are disabled
-  send-header-chat-packet: false
+  send-header-chat-packet: true
 
   # Join and leave messages
   # You can configure messages in the lang file
@@ -59,6 +60,15 @@ anti-spam:
   # How many messages can be sent in the time interval (in milliseconds)
   # You can override this with the permission "hychat.anti-spam.cooldown.X"
   cooldown: 5000
+  # What to do?
+  # You can list commands to execute or use
+    # "hychat::cancel" -> Block the message / Cancel event
+    # "hychat::notify" -> Notify the admins (hychat.anti-spam.notify)
+    # "hychat::send-message" -> Send a message to the player
+  # Papi is supported, HERE USE %PAPI% NOT <papi:PAPI> like in chatformat or lang file
+  actions:
+    - "hychat::send-message"
+    - "hychat::block"
 
 # Anti-swear settings
 # If you want to bypass antiswear use "hychat.anti-swear.bypass"
@@ -82,10 +92,35 @@ anti-swear:
   blocked-words:
     - "shit"
     - "trash"
+    # What to do?
+    # You can list commands to execute or use
+    # "hychat::cancel" -> Block the message / Cancel event
+    # "hychat::notify" -> Notify the admins (hychat.anti-swear.notify)
+    # "hychat::send-message" -> Send a message to the player
+  # Papi is supported, HERE USE %PAPI% NOT <papi:PAPI> like in chatformat or lang file
+  actions:
+    - "hychat::send-message"
+    - "hychat::notify"
+    - "hychat::cancel"
+
+actions:
+  notify:
+    minecraft:
+      anti-spam:
+        enabled: false # Configure message in lang file in specific module
+      anti-swear:
+        enabled: true # Configure message in lang file in specific module
+    discord:
+      anti-spam:
+        enabled: false
+        url: "https://discord.com/api/webhooks/..."
+      anti-swear:
+        enabled: true
+        url: "https://discord.com/api/webhooks/..."
 
 # Send some metrics into bstats (https://bstats.org/plugin/bukkit/HyChat/17003)
 # Also look into HyLib configuration
 send-metrics: true
 
 # Please, don't modify this version. It's used for internal purposes.
-config-version: 3
+config-version: 4
