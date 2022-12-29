@@ -2,6 +2,7 @@ locale: "en-US"
 
 # Custom chat format - use <player> for player name, <message> for message
 # There is also PlaceholderAPI support with <papi:NAME OF PLACEHOLDER> for example <papi:luckperms_prefix>
+  # You can use %papi% if you use MiniMessage in your placeholder
 # Use MiniMessage
 chat-format:
   enabled: true
@@ -68,7 +69,7 @@ anti-spam:
   # Papi is supported, HERE USE %PAPI% NOT <papi:PAPI> like in chatformat or lang file
   actions:
     - "hychat::send-message"
-    - "hychat::block"
+    - "hychat::cancel"
 
 # Anti-swear settings
 # If you want to bypass antiswear use "hychat.anti-swear.bypass"

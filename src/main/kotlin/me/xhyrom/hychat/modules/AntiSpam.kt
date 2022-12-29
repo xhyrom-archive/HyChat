@@ -39,15 +39,22 @@ object AntiSpam {
                         }
                         else -> {
                             if (HyChat.getInstance().getHooks().placeholderApi != null) {
-                                Bukkit.dispatchCommand(
-                                    Bukkit.getConsoleSender(),
-                                    HyChat.getInstance().getHooks().placeholderApi!!.setPlaceholders(event.player, action.replace("<player>", event.player.name))
-                                )
+                                Bukkit.getScheduler().runTask(HyChat.getInstance(), Runnable {
+                                    Bukkit.dispatchCommand(
+                                        Bukkit.getConsoleSender(),
+                                        HyChat.getInstance().getHooks().placeholderApi!!.setPlaceholders(
+                                            event.player,
+                                            action.replace("<player>", event.player.name)
+                                        )
+                                    )
+                                })
                             } else {
-                                Bukkit.dispatchCommand(
-                                    Bukkit.getConsoleSender(),
-                                    action.replace("<player>", event.player.name)
-                                )
+                                Bukkit.getScheduler().runTask(HyChat.getInstance(), Runnable {
+                                    Bukkit.dispatchCommand(
+                                        Bukkit.getConsoleSender(),
+                                        action.replace("<player>", event.player.name)
+                                    )
+                                })
                             }
                         }
                     }

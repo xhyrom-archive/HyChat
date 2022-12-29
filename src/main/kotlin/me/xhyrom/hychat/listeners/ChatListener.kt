@@ -79,8 +79,14 @@ class ChatListener : Listener {
         }
     }
 
-    private fun sendFormattedPlayerMessage(player: Player, sourceDisplayName: Component, message: Component, format: String): Component {
+    private fun sendFormattedPlayerMessage(player: Player, sourceDisplayName: Component, message: Component, originalFormat: String): Component {
         var sdn = sourceDisplayName
+        var format = originalFormat
+
+        if (HyChat.getInstance().getHooks().placeholderApi != null) {
+            format = HyChat.getInstance().getHooks().placeholderApi!!.setPlaceholders(player, format)
+        }
+
         return MiniMessage.miniMessage().deserialize(
             format,
             Utils.papiTag(player),
