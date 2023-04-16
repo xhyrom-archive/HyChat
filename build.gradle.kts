@@ -8,7 +8,7 @@ plugins {
 }
 
 group = "me.xhyrom.hychat"
-version = "1.1.1"
+version = "1.1.2"
 description = "A powerful and lightweight chat plugin for minecraft servers."
 
 repositories {
@@ -22,7 +22,7 @@ repositories {
 
 dependencies {
     compileOnly("io.papermc.paper:paper-api:1.19.2-R0.1-SNAPSHOT")
-    compileOnly("me.xhyrom.hylib:hylib-bukkit:1.2.1")
+    compileOnly("me.xhyrom.hylib:hylib-bukkit:1.2.3")
     compileOnly("me.clip:placeholderapi:2.11.2")
 
     implementation("net.kyori:adventure-text-serializer-plain:4.12.0")

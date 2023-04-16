@@ -6,6 +6,12 @@ author: xHyroM#2815
 api-version: 1.19
 softdepend:
   - PlaceholderAPI
+  - ProtocolLib
+  - ProtocolSupport
+  - ViaVersion
+  - ViaBackwards
+  - ViaRewind
+  - Geyser-Spigot
 
 depend:
   - hylib-bukkit
