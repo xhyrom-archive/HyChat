@@ -37,6 +37,7 @@ mention-system:
 # With the chat format, messages are already automatically made as system messages, but this can disable the popup :)
 # WORKS ONLY ON 1.19.2
 no-chat-reports:
+  enabled: false
   enforce-secure-chat: false
   strip-signature: false
   # Not required because chat reports are disabled
