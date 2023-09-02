@@ -57,8 +57,10 @@ class HyChat : JavaPlugin() {
         server.pluginManager.registerEvents(ChatListener(), this)
         server.pluginManager.registerEvents(PlayerListener(), this)
 
-        PacketEvents.getAPI().eventManager.registerListener(PacketListener())
-        PacketEvents.getAPI().init()
+        if (chatConfig.getBoolean("no-chat-reports.enabled").get()) {
+            PacketEvents.getAPI().eventManager.registerListener(PacketListener())
+            PacketEvents.getAPI().init()
+        }
 
         createCommand()
     }
