@@ -10,9 +10,9 @@ import me.xhyrom.hylib.common.api.HyLibProvider
 import me.xhyrom.hylib.common.api.structs.Command
 import me.xhyrom.hylib.common.api.structs.Config
 import me.xhyrom.hylib.common.api.structs.Language
+import me.xhyrom.hylib.libs.commandapi.CommandAPICommand
 import me.xhyrom.hylib.libs.commandapi.arguments.ArgumentSuggestions
 import me.xhyrom.hylib.libs.commandapi.arguments.StringArgument
-import me.xhyrom.hylib.libs.commandapi.executors.CommandArguments
 import me.xhyrom.hylib.libs.commandapi.executors.CommandExecutor
 import me.xhyrom.hylib.libs.packetevents.api.PacketEvents
 import me.xhyrom.hylib.libs.packetevents.impl.factory.spigot.SpigotPacketEventsBuilder
@@ -74,7 +74,7 @@ class HyChat : JavaPlugin() {
                         .withFullDescription("mute or unmute chat")
                         .withPermission("hychat.command.mute")
                         .executes(
-                            CommandExecutor { _: CommandSender, _: CommandArguments ->
+                            CommandExecutor { _: CommandSender, _: Array<Any?> ->
                                 run {
                                     MuteChat.isMuted = !MuteChat.isMuted
 
@@ -104,7 +104,7 @@ class HyChat : JavaPlugin() {
                             )
                         )
                         .executes(
-                            CommandExecutor { sender: CommandSender, args: CommandArguments ->
+                            CommandExecutor { sender: CommandSender, args: Array<Any?> ->
                                 run {
                                     when (args[0] as String) {
                                         "config" -> {
