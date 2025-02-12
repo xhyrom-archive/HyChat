@@ -3,12 +3,12 @@ plugins {
     id("java")
     id("maven-publish")
     id("com.github.johnrengelman.shadow") version "7.1.2"
-    kotlin("jvm") version "1.6.21"
+    kotlin("jvm") version "2.1.20-Beta2"
     application
 }
 
 group = "me.xhyrom.hychat"
-version = "2.0.0"
+version = "2.0.1"
 description = "A powerful and lightweight chat plugin for minecraft servers."
 
 repositories {
@@ -22,8 +22,8 @@ repositories {
 
 dependencies {
     compileOnly("io.papermc.paper:paper-api:1.19.2-R0.1-SNAPSHOT")
-    compileOnly("me.xhyrom.hylib:hylib-bukkit:2.0.0")
-    compileOnly("me.clip:placeholderapi:2.11.2")
+    compileOnly("me.xhyrom.hylib:hylib-bukkit:2.0.3")
+    compileOnly("me.clip:placeholderapi:2.11.6")
 
     implementation("net.kyori:adventure-text-serializer-plain:4.13.0")
     implementation("net.kyori:adventure-text-serializer-legacy:4.13.0")
